@@ -1,23 +1,28 @@
 import { useState } from 'react'
 
-const Button = ({anecdotes, select}) => {
+const SelectButton = ({anecdotes, setSelected}) => {
   // Get random index from anecdotes array
-  const getRandomInt = (anecdotes) => Math.floor(Math.random() * anecdotes.length)
+  const getRandomInt = () => Math.floor(Math.random() * anecdotes.length)
 
   // Choose the anecdote with a random number
-  const selectAnecdote = (anecdotes, index) => {
-    const randomInt = getRandomInt(anecdotes)
-    select(randomInt)
+  const selectAnecdote = () => {
+    const randomInt = getRandomInt()
+    setSelected(randomInt)
     return anecdotes[randomInt]
   }
 
-  return (
-    <div>
-      <button onClick={() => selectAnecdote(anecdotes, select)}>next anecdote</button>
-    </div>
-    
-  )
+  return <button onClick={() => selectAnecdote()}>next anecdote</button>
+}
 
+const VoteButton = ({selected, points, setPoints}) => {
+  // Add point to current anecdote
+  const addPoint = () => {
+    const copy = [...points]
+    copy[selected]++
+    setPoints(copy)
+  }
+
+  return <button onClick={() => addPoint()}>vote</button>
 }
 
 const App = () => {
@@ -33,10 +38,16 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
 
+  const [points, setPoints] = useState(Array(anecdotes.length).fill(0))
+
   return (
     <div>
-      {anecdotes[selected]}
-      <Button anecdotes={anecdotes} select={setSelected}/>
+      <p>{anecdotes[selected]}</p>
+      <p>has {points[selected]} votes</p>
+      <div>
+        <VoteButton selected={selected} points={points} setPoints={setPoints}/>
+        <SelectButton anecdotes={anecdotes} setSelected={setSelected}/>
+      </div>
     </div>
   )
 }
