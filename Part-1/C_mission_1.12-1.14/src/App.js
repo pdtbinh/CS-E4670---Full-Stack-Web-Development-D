@@ -53,6 +53,7 @@ const App = () => {
         <VoteButton selected={selected} points={points} setPoints={setPoints}/>
         <SelectButton anecdotes={anecdotes} setSelected={setSelected}/>
       </div>
+      
       <Header heading='Anecdote with most votes'/>
       <p>{anecdotes[highestVotesIndex]}</p>
       <p>has {points[highestVotesIndex]} votes</p>
