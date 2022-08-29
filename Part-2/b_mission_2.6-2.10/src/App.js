@@ -39,9 +39,11 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
       <Filter handleSearchChange={handleSearchChange} search={search}/>
 
       <h2>Add a new</h2>
+
       <PersonForm 
         addPerson={addPerson} 
         newName={newName} 
@@ -51,6 +53,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
+      
       <Persons persons={persons} search={search}/>
     </div>
   )
