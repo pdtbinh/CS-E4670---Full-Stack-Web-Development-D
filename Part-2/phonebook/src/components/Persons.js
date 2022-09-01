@@ -21,7 +21,7 @@ export const PersonForm = ({addPerson, newName, handleNameChange, newNumber, han
 export const Persons = ({persons, search}) => (
     <>
         {persons.map(person => (
-            (person.name.indexOf(search) > -1) ? 
+            (person.name.toLowerCase().indexOf(search.toLowerCase()) > -1) ? 
             <p key={person.id}>{person.name} {person.number}</p> 
             : null
         ))}
