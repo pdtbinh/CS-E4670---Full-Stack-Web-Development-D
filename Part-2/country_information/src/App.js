@@ -6,7 +6,6 @@ const App = () => {
 
     const hook = () => {
         axios.get('https://restcountries.com/v3.1/all').then(response => {
-            console.log(response.data[0])
             setCountries(response.data)
         })
     }

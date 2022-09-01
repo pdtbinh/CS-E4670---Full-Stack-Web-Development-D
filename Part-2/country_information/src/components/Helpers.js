@@ -15,9 +15,7 @@ export const Country = ({country}) => {
         axios
             .get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${api_key}`)
             .then(res => {
-                console.log(res.data)
                 setWeather(res.data)
-                
             })
     }
     useEffect(() => hook(country.latlng[0], country.latlng[1]), [])
