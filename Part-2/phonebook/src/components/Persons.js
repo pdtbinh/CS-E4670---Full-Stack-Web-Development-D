@@ -22,7 +22,7 @@ export const Persons = ({persons, search}) => (
     <>
         {persons.map(person => (
             (person.name.indexOf(search) > -1) ? 
-            <p key={person.name}>{person.name} {person.number}</p> 
+            <p key={person.id}>{person.name} {person.number}</p> 
             : null
         ))}
     </>
