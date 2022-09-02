@@ -18,11 +18,13 @@ export const PersonForm = ({addPerson, newName, handleNameChange, newNumber, han
     </form>
 )
 
-export const Persons = ({persons, search}) => (
+export const Persons = ({persons, search, handleDelete}) => (
     <>
         {persons.map(person => (
             (person.name.toLowerCase().indexOf(search.toLowerCase()) > -1) ? 
-            <p key={person.id}>{person.name} {person.number}</p> 
+            <div key={person.id}>
+                <span>{person.name} {person.number}</span> <button onClick={() => handleDelete(person)}>delete</button>
+            </div>
             : null
         ))}
     </>
