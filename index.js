@@ -1,4 +1,5 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
 let persons = [
@@ -7,7 +8,7 @@ let persons = [
     "name": "Arto Hellas", 
     "number": "040-123456"
   },
-  { 
+  {  
     "id": 2,
     "name": "Ada Lovelace", 
     "number": "39-44-5323523"
@@ -23,6 +24,8 @@ let persons = [
     "number": "39-23-6423122"
   }
 ]
+
+app.use(morgan('tiny'));
 
 app.use(express.json())
 
