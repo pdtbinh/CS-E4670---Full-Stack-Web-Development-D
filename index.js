@@ -34,6 +34,12 @@ app.get('/api/persons', (req, res) => {
   res.json(persons)
 })
 
+app.get('/api/info', (req, res) => {
+  const response = `Phonebook has info for ${persons.length} people`
+  const now = new Date()
+  res.send(`<div><div>${response}</div><div>${now}</div></div>`)
+})
+
 
 // const generateId = () => {
 //   const maxId = notes.length > 0
