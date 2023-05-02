@@ -46,9 +46,16 @@ app.get('/api/persons/:id', (req, res) => {
 })
 
 app.get('/api/info', (req, res) => {
-  const response = `Phonebook has info for ${persons.length} people`
+  const count = `Phonebook has info for ${persons.length} people`
   const now = new Date()
-  res.send(`<div><div>${response}</div><div>${now}</div></div>`)
+  res.send(`<div><div>${count}</div><div>${now}</div></div>`)
+})
+
+app.delete('/api/persons/:id', (req, res) => {
+  const id = Number(req.params.id)
+  persons = persons.filter(person => person.id !== id)
+
+  res.status(204).end()
 })
 
 // const generateId = () => {
