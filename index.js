@@ -1,7 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const cors = require('cors')
+const Entry = require('./models/entry')
 
 let persons = [
   { 
@@ -40,7 +42,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/persons', (req, res) => {
-  res.json(persons)
+  Entry.find({}).then(entries => res.json(entries))
 })
 
 app.get('/api/persons/:id', (req, res) => {
@@ -67,9 +69,9 @@ app.delete('/api/persons/:id', (req, res) => {
   res.status(204).end()
 })
 
-const generateId = () => {
-  return Math.round(Math.random() * 1000)
-}
+// const generateId = () => {
+//   return Math.round(Math.random() * 1000)
+// }
 
 app.post('/api/persons', (req, res) => {
   const body = req.body
@@ -82,21 +84,19 @@ app.post('/api/persons', (req, res) => {
     return res.status(400).json({ 
       error: 'number missing' 
     })
-  } else if (persons.map(person => person.name).includes(body.name)) {
-    return res.status(400).json({ 
-      error: 'name must be unique' 
-    })
-  }
+  } 
+  // else if (persons.map(person => person.name).includes(body.name)) {
+  //   return res.status(400).json({ 
+  //     error: 'name must be unique' 
+  //   })
+  // }
 
-  const person = {
+  const entry = new Entry({
     name: body.name,
-    number: body.number,
-    id: generateId(),
-  }
+    number: body.number
+  })
 
-  persons = persons.concat(person)
-
-  res.json(person)
+  entry.save().then(savedEntry => res.json(savedEntry))
 })
 
 const PORT = process.env.PORT || 3001
