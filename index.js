@@ -6,14 +6,12 @@ const cors = require('cors')
 const Entry = require('./models/entry')
 
 app.use(cors())
-morgan.token('body', (req, res) => JSON.stringify(req.body));
-app.use(morgan(':method :url :status :req[content-length] - :response-time ms :body'));
+morgan.token('body', (req) => JSON.stringify(req.body))
+app.use(morgan(':method :url :status :req[content-length] - :response-time ms :body'))
 app.use(express.json())
 app.use(express.static('build'))
 
-app.get('/', (req, res) => {
-  res.send('<h1>Hello World!</h1>')
-})
+app.get('/', (req, res) => { res.send('<h1>Hello World!</h1>') })
 
 app.get('/api/persons', (req, res, next) => {
   Entry.find({})
@@ -21,18 +19,18 @@ app.get('/api/persons', (req, res, next) => {
     .catch(error => next(error))
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const body = req.body
 
   if (!body.name) {
-    return res.status(400).json({ 
-      error: 'name missing' 
+    return res.status(400).json({
+      error: 'name missing'
     })
   } else if (!body.number) {
-    return res.status(400).json({ 
-      error: 'number missing' 
+    return res.status(400).json({
+      error: 'number missing'
     })
-  } 
+  }
 
   // Check if entry's name already exists
   Entry.findOne({ name: body.name })
@@ -48,7 +46,9 @@ app.post('/api/persons', (req, res) => {
     number: body.number
   })
 
-  entry.save().then(savedEntry => res.json(savedEntry))
+  entry.save()
+    .then(savedEntry => res.json(savedEntry))
+    .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (req, res, next) => {
@@ -72,11 +72,11 @@ app.put('/api/persons/:id', (req, res, next) => {
 
 app.delete('/api/persons/:id', (req, res, next) => {
   Entry.findByIdAndRemove(req.params.id)
-    .then(result => res.status(204).end())
+    .then(() => res.status(204).end())
     .catch(error => next(error))
 })
 
-app.get('/api/info', (req, res) => {
+app.get('/api/info', (req, res, next) => {
   Entry.find({})
     .then(entries => {
       const count = `Phonebook has info for ${entries.length} people`
@@ -87,10 +87,10 @@ app.get('/api/info', (req, res) => {
 })
 
 const errorHandler = (err, req, res, next) => {
-  console.error(err.message)
-  if (err.name === 'CastError') {
+  if (err.name === 'CastError')
     return res.status(400).send({ error: 'malformated id' })
-  }
+  else if (err.name === 'ValidationError')
+    return res.status(400).json({ error: err.message })
   next(err)
 }
 app.use(errorHandler)
