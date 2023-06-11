@@ -5,73 +5,21 @@ const app = express()
 const cors = require('cors')
 const Entry = require('./models/entry')
 
-let persons = [
-  { 
-    "id": 1,
-    "name": "Arto Hellas", 
-    "number": "040-123456"
-  },
-  {  
-    "id": 2,
-    "name": "Ada Lovelace", 
-    "number": "39-44-5323523"
-  },
-  { 
-    "id": 3,
-    "name": "Dan Abramov", 
-    "number": "12-43-234345"
-  },
-  { 
-    "id": 4,
-    "name": "Mary Poppendieck", 
-    "number": "39-23-6423122"
-  }
-]
-
 app.use(cors())
-
 morgan.token('body', (req, res) => JSON.stringify(req.body));
 app.use(morgan(':method :url :status :req[content-length] - :response-time ms :body'));
-
 app.use(express.json())
-
 app.use(express.static('build'))
 
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
 })
 
-app.get('/api/persons', (req, res) => {
-  Entry.find({}).then(entries => res.json(entries))
+app.get('/api/persons', (req, res, next) => {
+  Entry.find({})
+    .then(entries => res.json(entries))
+    .catch(error => next(error))
 })
-
-app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  const person = persons.find(person => person.id === id)
-
-  if (person) {
-    res.json(person)
-  } else {
-    res.status(404).end()
-  }
-})
-
-app.get('/api/info', (req, res) => {
-  const count = `Phonebook has info for ${persons.length} people`
-  const now = new Date()
-  res.send(`<div><div>${count}</div><div>${now}</div></div>`)
-})
-
-app.delete('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  persons = persons.filter(person => person.id !== id)
-
-  res.status(204).end()
-})
-
-// const generateId = () => {
-//   return Math.round(Math.random() * 1000)
-// }
 
 app.post('/api/persons', (req, res) => {
   const body = req.body
@@ -85,11 +33,15 @@ app.post('/api/persons', (req, res) => {
       error: 'number missing' 
     })
   } 
-  // else if (persons.map(person => person.name).includes(body.name)) {
-  //   return res.status(400).json({ 
-  //     error: 'name must be unique' 
-  //   })
-  // }
+
+  // Check if entry's name already exists
+  Entry.findOne({ name: body.name })
+    .then(result => {
+      if (result)
+        // POST redirects to PUT instead of GET
+        res.redirect(`/api/persons/${result.id}`)
+    })
+    .catch(error => next(error))
 
   const entry = new Entry({
     name: body.name,
@@ -98,6 +50,50 @@ app.post('/api/persons', (req, res) => {
 
   entry.save().then(savedEntry => res.json(savedEntry))
 })
+
+app.get('/api/persons/:id', (req, res, next) => {
+  Entry.findById(req.params.id)
+    .then(entry => {
+      if (entry)
+        res.json(entry)
+      else
+        res.status(404).end()
+    })
+    .catch(error => next(error))
+})
+
+app.put('/api/persons/:id', (req, res, next) => {
+  const { name, number } = req.body
+  const entry = { name, number }
+  Entry.findByIdAndUpdate(req.params.id, entry, { new: true })
+    .then(updatedEntry => res.status(200).json(updatedEntry))
+    .catch(error => next(error))
+})
+
+app.delete('/api/persons/:id', (req, res, next) => {
+  Entry.findByIdAndRemove(req.params.id)
+    .then(result => res.status(204).end())
+    .catch(error => next(error))
+})
+
+app.get('/api/info', (req, res) => {
+  Entry.find({})
+    .then(entries => {
+      const count = `Phonebook has info for ${entries.length} people`
+      const now = new Date()
+      res.send(`<div><div>${count}</div><div>${now}</div></div>`)
+    })
+    .catch(error => next(error))
+})
+
+const errorHandler = (err, req, res, next) => {
+  console.error(err.message)
+  if (err.name === 'CastError') {
+    return res.status(400).send({ error: 'malformated id' })
+  }
+  next(err)
+}
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
