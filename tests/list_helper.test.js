@@ -19,7 +19,6 @@ describe('total likes', () => {
     })
 })
 
-
 describe('favorite blog', () => {
     test('when list has only one blog, equals that one', () => {
         const result = listHelper.favoriteBlog(seed.listWithOneBlog)
