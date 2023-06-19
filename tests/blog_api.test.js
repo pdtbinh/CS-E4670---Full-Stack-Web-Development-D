@@ -3,6 +3,7 @@ const Blog = require('../models/blog')
 const supertest = require('supertest')
 const app = require('../app')
 const helper = require('./test_helper')
+require('express-async-errors')
 
 const api = supertest(app)
 
@@ -87,6 +88,43 @@ describe('4.12: Blog list tests, step 4', () => {
             .post('/api/blogs')
             .send(newBlog)
             .expect(400)
+    })
+})
+
+describe('4.13: Blog list expansions, step 1', () => {
+    test('deleting a single post should behave correctly', async () => {
+        const response = await api.get('/api/blogs')
+        const id = response.body[0].id
+        await api
+            .delete(`/api/blogs/${id}`)
+            .expect(204)
+        
+        const after_delete_response = await api
+            .get('/api/blogs')
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+        
+        expect(after_delete_response.body.length).toBe(helper.initialBlogs.length - 1)
+    })
+})
+
+describe('4.14: Blog list expansions, step 2', () => {
+    test('updating a single post should behave correctly', async () => {
+        const response = await api.get('/api/blogs')
+        const blog = { ...response.body[0], likes: 70 }
+        const PUT_response = await api
+            .put(`/api/blogs/${blog.id}`)
+            .send(blog)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        expect(PUT_response.body).toEqual(blog)
+        
+        const after_update_response = await api
+            .get('/api/blogs')
+            .expect(200)
+        
+        expect(after_update_response.body.length).toBe(helper.initialBlogs.length) // extra test: length should be the same after update
     })
 })
 
