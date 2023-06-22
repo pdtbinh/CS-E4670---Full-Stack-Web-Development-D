@@ -2,6 +2,7 @@ require('dotenv').config()
 const logger = require('./logger')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
+require('express-async-errors')
 
 const tokenExtractor = (request, response, next) => {
     const authorization = request.get('authorization')
@@ -12,7 +13,12 @@ const tokenExtractor = (request, response, next) => {
 }
 
 const userExtractor = async (request, response, next) => {
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    let decodedToken = ''
+    try {
+        decodedToken = jwt.verify(request.token, process.env.SECRET)
+    } catch {
+        decodedToken = {}
+    }
     if (!decodedToken.id) {
         return next()
     }
