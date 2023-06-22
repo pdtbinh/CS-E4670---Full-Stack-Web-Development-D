@@ -109,7 +109,7 @@ describe('4.13: Blog list expansions, step 1', () => {
 })
 
 describe('4.14: Blog list expansions, step 2', () => {
-    test('updating a single post should behave correctly', async () => {
+    test('update a single post should behave correctly', async () => {
         const response = await api.get('/api/blogs')
         const blog = { ...response.body[0], likes: 70 }
         const PUT_response = await api
