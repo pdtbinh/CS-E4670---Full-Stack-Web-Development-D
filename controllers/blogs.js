@@ -1,7 +1,5 @@
-const jwt = require('jsonwebtoken')
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
-const User = require('../models/user')
 require('express-async-errors')
 
 blogsRouter.get('/', async (request, response) => {
@@ -17,11 +15,10 @@ blogsRouter.post('/', async (request, response) => {
     if (!request.body.title || !request.body.url) return response.status(400).end()
     
     // Create blog
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    if (!decodedToken.id) {
+    if (!request.user) {
         return response.status(401).json({ error: 'token invalid' })
     }
-    const user = await User.findById(decodedToken.id)
+    const user = request.user
     const blog = new Blog({ ...request.body, user: user._id })
     const savedBlog = await blog.save()
 
@@ -34,13 +31,11 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    if (!decodedToken.id) {
+    if (!request.user) {
         return response.status(401).json({ error: 'token invalid' })
     }
-    
+    const user = request.user
     const blog = await Blog.findById(request.params.id)
-    const user = await User.findById(decodedToken.id)
     
     if (blog.user._id.toString() !== user._id.toString()) {
         return response.status(401).json({ error: 'unauthorized request' })
