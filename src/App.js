@@ -12,9 +12,11 @@ const App = () => {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
+    blogService.getAll().then(data => {
+      const blogs = [ ...data ]
+      blogs.sort((blog, anotherBlog) => anotherBlog.likes - blog.likes)
+      setBlogs(blogs)
+    })
   }, [])
 
   useEffect(() => {

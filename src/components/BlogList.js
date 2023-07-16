@@ -41,7 +41,7 @@ const BlogList = ({ blogs, setBlogs, user, setUser, setSuccess, setError }) => {
                 }
             </div>
             {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs}/>
+                <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} user={user}/>
             )}
             
         </div>
