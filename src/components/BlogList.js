@@ -1,6 +1,6 @@
 import Blog from "./Blog"
 import blogsService from '../services/blogs'
-import AddBlog from "./AddBlog"
+import BlogForm from "./BlogForm"
 import { useState } from "react"
 
 const BlogList = ({ blogs, setBlogs, user, setUser, setSuccess, setError }) => {
@@ -23,7 +23,7 @@ const BlogList = ({ blogs, setBlogs, user, setUser, setSuccess, setError }) => {
             <div>
                 {
                     showBlogForm ? (<>
-                        <AddBlog 
+                        <BlogForm 
                             blogs={blogs} 
                             setBlogs={setBlogs}
                             setError={setError}
