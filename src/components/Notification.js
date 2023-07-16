@@ -1,5 +1,4 @@
-
-export const SuccessMessage = ({message}) => {
+export const SuccessMessage = ({ message }) => {
     if (message === null) {
         return null
     }
@@ -12,14 +11,12 @@ export const SuccessMessage = ({message}) => {
         'padding': '10px',
         'marginBottom': '10px',
     }
-    return (
-    <div style={style}>
+    return (<div style={style}>
         {message}
-    </div>
-    )
+    </div>)
 }
 
-export const ErrorMessage = ({message}) => {
+export const ErrorMessage = ({ message }) => {
     if (message === null) {
         return null
     }
@@ -32,9 +29,7 @@ export const ErrorMessage = ({message}) => {
         'padding': '10px',
         'marginBottom': '10px',
     }
-    return (
-    <div style={style}>
+    return (<div style={style}>
         {message}
-    </div>
-    )
+    </div>)
 }

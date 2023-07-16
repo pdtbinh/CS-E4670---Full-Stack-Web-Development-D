@@ -1,7 +1,7 @@
-import Blog from "./Blog"
+import Blog from './Blog'
 import blogsService from '../services/blogs'
-import BlogForm from "./BlogForm"
-import { useState } from "react"
+import BlogForm from './BlogForm'
+import { useState } from 'react'
 
 const BlogList = ({ blogs, setBlogs, user, setUser, setSuccess, setError }) => {
 
@@ -17,14 +17,14 @@ const BlogList = ({ blogs, setBlogs, user, setUser, setSuccess, setError }) => {
         <div>
             <h2>blogs</h2>
             <p>{user.name} logged in</p>
-            {/* It makes sense that the logout button is in the blog list, 
+            {/* It makes sense that the logout button is in the blog list,
             because the blog list only appears when the user is logged in. */}
             <button onClick={logout}>Logout</button>
             <div>
                 {
                     showBlogForm ? (<>
-                        <BlogForm 
-                            blogs={blogs} 
+                        <BlogForm
+                            blogs={blogs}
                             setBlogs={setBlogs}
                             setError={setError}
                             setSuccess={setSuccess}
@@ -34,8 +34,7 @@ const BlogList = ({ blogs, setBlogs, user, setUser, setSuccess, setError }) => {
                         <button onClick={() => setShowBlogForm(false)}>
                             Cancel
                         </button>
-                    </>) 
-                    : <button onClick={() => setShowBlogForm(true)}>
+                    </>) : <button onClick={() => setShowBlogForm(true)}>
                         New blog
                     </button>
                 }
@@ -43,7 +42,6 @@ const BlogList = ({ blogs, setBlogs, user, setUser, setSuccess, setError }) => {
             {blogs.map(blog =>
                 <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} user={user}/>
             )}
-            
         </div>
     )
 }

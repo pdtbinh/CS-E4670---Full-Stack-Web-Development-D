@@ -18,7 +18,7 @@ const BlogForm = ({ blogs, setBlogs, setSuccess, setError, setShowBlogForm, user
             setShowBlogForm(false)
             setSuccess(`A new blog ${title} by ${author} added`)
             setTimeout(() => setSuccess(null), 5000)
-        } catch {
+        } catch (err) {
             setError('An error occur, please try again')
             setTimeout(() => setError(null), 5000)
         }
