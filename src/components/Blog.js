@@ -19,6 +19,7 @@ const Blog = ({ blog, blogs, setBlogs }) => {
       await blogService.edit(blog.id, newBlog)
       const newBlogs = [ ...blogs ]
       newBlogs[blogs.indexOf(blog)] = newBlog
+      newBlogs.sort((blog, anotherBlog) => anotherBlog.likes - blog.likes)
       setBlogs(newBlogs)
     } catch {
       // exception handling for this function is not required in the exercises
