@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import loginService from '../services/login'
 import blogsService from '../services/blogs'
+import PropTypes from 'prop-types'
 
 const LoginForm = ({ setUser, setSuccess, setError }) => {
     const [username, setUsername] = useState('')
@@ -14,7 +15,7 @@ const LoginForm = ({ setUser, setSuccess, setError }) => {
             })
             window.localStorage.setItem(
                 'loggedBlogappUser', JSON.stringify(user)
-            ) 
+            )
             blogsService.setToken(user.token)
             setUser(user)
             setUsername('')
@@ -53,6 +54,12 @@ const LoginForm = ({ setUser, setSuccess, setError }) => {
             </form>
         </div>
     )
+}
+
+LoginForm.propTypes = {
+    setUser: PropTypes.func.isRequired,
+    setSuccess: PropTypes.func.isRequired,
+    setError: PropTypes.func.isRequired
 }
 
 export default LoginForm
