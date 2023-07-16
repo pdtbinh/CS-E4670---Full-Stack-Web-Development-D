@@ -11,11 +11,12 @@ const api = supertest(app)
 
 let auth = ''
 let uid = ''
+let userObj = null
 
 beforeEach(async () => {
     await User.deleteMany({})
     await Blog.deleteMany({})
-    await Blog.insertMany(helper.initialBlogs)
+    //await Blog.insertMany(helper.initialBlogs)
 
     const userInfo = {
         name: 'Binh',
@@ -35,9 +36,17 @@ beforeEach(async () => {
         .get('/api/users')
     
     const user = userResponse.body[0]
+    userObj = user
     
     auth = `Bearer ${loginResponse.body.token}`
     uid = user.id
+
+    for (let blog of helper.initialBlogs) {
+        await api
+            .post('/api/blogs')
+            .set('Authorization', auth)
+            .send(blog)
+    }
 })
 
 describe('4.8: Blog list tests, step 1', () => {
@@ -129,6 +138,7 @@ describe('4.13: Blog list expansions, step 1', () => {
         const id = response.body[0].id
         await api
             .delete(`/api/blogs/${id}`)
+            .set('Authorization', auth)
             .expect(204)
         
         const after_delete_response = await api
