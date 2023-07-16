@@ -29,6 +29,7 @@ const BlogList = ({ blogs, setBlogs, user, setUser, setSuccess, setError }) => {
                             setError={setError}
                             setSuccess={setSuccess}
                             setShowBlogForm={setShowBlogForm}
+                            user={user}
                         />
                         <button onClick={() => setShowBlogForm(false)}>
                             Cancel

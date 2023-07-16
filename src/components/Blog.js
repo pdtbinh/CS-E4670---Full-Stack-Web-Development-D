@@ -2,6 +2,8 @@ import { useState } from "react"
 
 const Blog = ({ blog }) => {
 
+  console.log(blog)
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -14,7 +16,7 @@ const Blog = ({ blog }) => {
 
   return (
     <div style={blogStyle}>
-      {blog.title} {hidden ? blog.author : null}
+      {blog.title} {blog.author}
 
       {hidden && <button onClick={() => setHidden(false)}>View</button>}
       
@@ -23,7 +25,7 @@ const Blog = ({ blog }) => {
           <button onClick={() => setHidden(true)}>Hide</button>
           <p>{blog.url}</p>
           <p>likes {blog.likes} <button>like</button></p>
-          <p>{blog.author}</p>
+          <p>{blog.user.name}</p>
         </>
       )}
     </div>
