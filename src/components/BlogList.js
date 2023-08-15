@@ -2,6 +2,7 @@ import Blog from './Blog'
 import blogsService from '../services/blogs'
 import BlogForm from './BlogForm'
 import { useState } from 'react'
+import blogService from '../services/blogs'
 
 const BlogList = ({ blogs, setBlogs, user, setUser, setSuccess, setError }) => {
 
@@ -30,6 +31,7 @@ const BlogList = ({ blogs, setBlogs, user, setUser, setSuccess, setError }) => {
                             setSuccess={setSuccess}
                             setShowBlogForm={setShowBlogForm}
                             user={user}
+                            create={blogService.create}
                         />
                         <button onClick={() => setShowBlogForm(false)}>
                             Cancel
@@ -40,7 +42,16 @@ const BlogList = ({ blogs, setBlogs, user, setUser, setSuccess, setError }) => {
                 }
             </div>
             {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} user={user}/>
+                <Blog
+                    key={blog.id}
+                    blog={blog}
+                    blogs={blogs}
+                    setBlogs={setBlogs}
+                    user={user}
+                    blogService={blogsService}
+                    edit={blogService.edit}
+                    remove={blogService.remove}
+                />
             )}
         </div>
     )
