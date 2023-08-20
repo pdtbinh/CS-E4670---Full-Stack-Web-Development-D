@@ -38,16 +38,16 @@ const Blog = ({ blog, blogs, setBlogs, user, edit, remove }) => {
     }
 
     return (
-        <div style={blogStyle}>
+        <div className="blog" style={blogStyle}>
             {blog.title} {blog.author}
-            {hidden && <button onClick={() => setHidden(false)}>View</button>}
+            {hidden && <button id="view" onClick={() => setHidden(false)}>View</button>}
             {hidden || (
                 <>
                     <button onClick={() => setHidden(true)}>Hide</button>
                     <p>{blog.url}</p>
-                    <p>likes {blog.likes} <button onClick={likeBlog}>like</button></p>
+                    <p>likes {blog.likes} <button className="like" onClick={likeBlog}>like</button></p>
                     <p>{blog.user.name}</p>
-                    {(blog.user.username === user.username) && <button onClick={() => removeBlog()}>Remove</button>}
+                    {(blog.user.username === user.username) && <button id="remove" onClick={() => removeBlog()}>Remove</button>}
                 </>
             )}
         </div>
