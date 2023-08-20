@@ -48,6 +48,8 @@ describe('Blog app', function() {
             cy.get('#author').type('JKR')
             cy.get('#url').type('abc.com')
             cy.contains('Create').click()
+            cy.contains('A new blog Harry Porter by JKR added')
+            // Check new blog is added to list of all blogs
             cy.contains('Harry Porter JKR')
             cy.contains('View')
         })
