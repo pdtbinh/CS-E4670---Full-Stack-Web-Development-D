@@ -29,7 +29,7 @@ export const ErrorMessage = ({ message }) => {
         'padding': '10px',
         'marginBottom': '10px',
     }
-    return (<div style={style}>
+    return (<div className="error" style={style}>
         {message}
     </div>)
 }
