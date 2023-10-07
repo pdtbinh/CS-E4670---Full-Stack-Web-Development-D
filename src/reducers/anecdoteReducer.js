@@ -49,7 +49,6 @@ const reducer = (state = initialState, action) => {
     default: newState = state
   }
   return newState.sort((a,b) => b.votes - a.votes)
-
 }
 
 export default reducer
